@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<item android:drawable="@color/press" android:state_selected="true"/>
+    <item android:drawable="@color/focus" android:state_focused="true"/>
+    <item android:drawable="@color/normal" />-->
+    <item android:state_selected="false">
+        <shape android:shape="rectangle">
+            <!-- 圆角 -->
+            <corners android:radius="5dp" />
+            <!--填充颜色为白色-->
+            <solid android:color="@color/normal_bg" />
+            <!-- 描边 -->
+            <stroke android:width="1dp" android:color="@color/normal_bg" />
+        </shape>
+    </item>
+    <!--单击时是一个带圆角,白色背景,绿色边框的矩形-->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <!--圆角-->
+            <corners android:radius="@dimen/dp_5" />
+            <!--填充颜色为白色-->
+            <solid android:color="@color/press" />
+            <!--描边-->
+            <stroke android:width="1dp" android:color="@color/normal" />
+        </shape>
+    </item>
+</selector>

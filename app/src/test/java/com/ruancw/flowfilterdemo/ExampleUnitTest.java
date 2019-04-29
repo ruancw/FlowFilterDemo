@@ -1,4 +1,4 @@
-package com.pajx.flowfilterdemo;
+package com.ruancw.flowfilterdemo;
 
 import org.junit.Test;
 
