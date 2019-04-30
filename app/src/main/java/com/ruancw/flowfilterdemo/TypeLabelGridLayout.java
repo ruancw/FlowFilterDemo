@@ -28,7 +28,7 @@ public class TypeLabelGridLayout extends GridLayout {
     private int tabTextSize = 16;
     //标题字体颜色
     private int titleTextColor = Color.parseColor("#333333");
-    private int lineColor = Color.parseColor("#F8F8F8");
+    private int lineColor = Color.parseColor("#F5F5F5");
     //tab标签字体颜色
     private int labelTextColor = R.color.color_popup;
     //tab标签背景颜色
@@ -66,8 +66,11 @@ public class TypeLabelGridLayout extends GridLayout {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setGridData(List<FilterBean> listData) {
         this.listData=listData;
+        //设置列数
         setColumnCount(columnCount);
+        //设置行数
         setRowCount(getTabRowCount());
+        //GridLayout属性参数设置
         for (int i = 0; i < listData.size(); i++){
             //行数++
             ++row;
@@ -87,7 +90,7 @@ public class TypeLabelGridLayout extends GridLayout {
             layoutParams.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
             layoutParams.bottomMargin = context.getResources().getDimensionPixelSize(R.dimen.dp_8);
             addView(tvType,layoutParams);
-            //2018/8/31添加分割线
+            //添加分割线
             View view=new View(context);
             GridLayout.LayoutParams layoutParams1 = new GridLayout.LayoutParams(rowSpec, columnSpec);
             layoutParams1.width = GridLayout.LayoutParams.WRAP_CONTENT;
@@ -99,7 +102,7 @@ public class TypeLabelGridLayout extends GridLayout {
             if (mulEnable){
                 mulAddTabs(listData.get(i));
             }else {
-                addTabs(listData.get(i),i);
+                addSingleTabs(listData.get(i),i);
             }
 
         }
@@ -190,13 +193,16 @@ public class TypeLabelGridLayout extends GridLayout {
             label.setSelected(true);
             //记录选中的tab值
             model.setTab(tab);
-            //新增未点击筛选条件，返回默认的不限选项
-            //2018/11/4 删除添加标签到集合，不然会重复添加（327行处）
-            //labelLists.add(model.getTypeName()+"-"+tab.name);
         }
         return isSelect;
     }
 
+    /**
+     * 设置标签的属性
+     * @param tabIndex 标签的位置
+     * @param tab 标签数据
+     * @param label 标签控件
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setLabel(int tabIndex, FilterBean.TableMode tab, TextView label) {
         label.setTextSize(tabTextSize);
@@ -221,7 +227,7 @@ public class TypeLabelGridLayout extends GridLayout {
      * @param labelIndex 标签的标号
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void addTabs(final FilterBean model, final int labelIndex){
+    private void addSingleTabs(final FilterBean model, final int labelIndex){
         boolean isSelect=false;//判断是否有选中的标签
         List<FilterBean.TableMode> tabs = model.getTabs();
         for (int i = 0; i < tabs.size(); i++){
@@ -252,6 +258,7 @@ public class TypeLabelGridLayout extends GridLayout {
                         //设置当前点击选中的tab值
                         model.setTab(tab);
                         label.setSelected(true);
+                        selectLabel.add(label);
                         String labelText=label.getText().toString();
                         //解决tab未被点击时 ，不添加默认的“不限”数据到集合中
                         int flag=-1;//用于记录需要替换的位置
@@ -279,6 +286,12 @@ public class TypeLabelGridLayout extends GridLayout {
         }
     }
 
+    /**
+     * 记录数据
+     * @param labelText 标签上的文字
+     * @param flag 标识
+     * @param model 数据模型
+     */
     private void recordStatus(String labelText, int flag, FilterBean model) {
         if (labelLists.size()!=0){
             for (int i=0;i<labelLists.size();i++){
@@ -304,6 +317,12 @@ public class TypeLabelGridLayout extends GridLayout {
         }
     }
 
+    /**
+     * 设置GridLayout的条目属性
+     * @param i 位置
+     * @param row 行数
+     * @return GridLayout.LayoutParams
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private GridLayout.LayoutParams getItemLayoutParams(int i, int row){
         //使用Spec定义子控件的位置和比重
@@ -333,12 +352,12 @@ public class TypeLabelGridLayout extends GridLayout {
     private int getIndex(FilterBean model, int labelIndex){
         int index = 0;
         for (int i = 0; i < labelIndex; i++){
-            //计算当前类型之前的元素所占的个数 title算一个,分割线也算一个（2018/8/31）
+            //计算当前类型之前的元素所占的个数 title算一个,分割线也算一个
             index += listData.get(i).getTabs().size() + 2;
         }
         //加上当前 title下的索引
         FilterBean.TableMode tableModel = model.getTab();
-        index += model.getTabs().indexOf(tableModel) + 2;//2018/8/31
+        index += model.getTabs().indexOf(tableModel) + 2;
         return index;
     }
 
@@ -430,6 +449,9 @@ public class TypeLabelGridLayout extends GridLayout {
         return labelLists;
     }
 
+    /**
+     * 重置数据
+     */
     public void resetData(){
         for (int i=0;i<selectLabel.size();i++){
             selectLabel.get(i).setSelected(false);

@@ -60,8 +60,11 @@ public class LabelGridLayout extends GridLayout {
     @SuppressLint("RtlHardcoded")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setGridData(List<FilterBean> listData) {
+        //设置列数
         setColumnCount(columnCount);
+        //设置行数
         setRowCount(getRowCount(listData));
+        //将数据源设置到每个标签
         for (int i = 0; i < listData.size(); i++){
             //行数++
             ++row;
@@ -72,11 +75,15 @@ public class LabelGridLayout extends GridLayout {
             GridLayout.Spec rowSpec = spec(row);
             //将Spec传入GridLayout.LayoutParams并设置宽高为0或者WRAP_CONTENT，必须设置宽高，否则视图异常
             GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams(rowSpec, columnSpec);
+            //设置宽度
             layoutParams.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            //设置高度
             layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            //设置位置
             layoutParams.setGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+            //设置间距
             layoutParams.bottomMargin = context.getResources().getDimensionPixelSize(R.dimen.dp_8);
-            //添加tab标签
+            //根据mulEnable属性值添加tab标签
             if (mulEnable){
                 //多选
                 mulAddTabs(listData.get(i));
@@ -96,11 +103,12 @@ public class LabelGridLayout extends GridLayout {
     private void mulAddTabs(final FilterBean model){
         List<FilterBean.TableMode> tabs = model.getTabs();
         for (int i = 0; i < tabs.size(); i++){
+            //判断是否增加行数
             if (i % columnCount == 0){
                 row ++;
             }
             final FilterBean.TableMode tab = tabs.get(i);
-            //显示标签的控件
+            //显示标签的控件TextView
             final TextView label = new TextView(context);
             //设置标签属性
             setLabel(i, tab, label);
@@ -114,6 +122,7 @@ public class LabelGridLayout extends GridLayout {
                         //解决不点击label情况下记录上次选中的状态及参数
                         selectTab.add(tab);
                         selectLabel.add(tab.name);
+                        //记录选中的标签用于重置数据
                         selectTvLabel.add(label);
                     }
                 }
@@ -123,6 +132,7 @@ public class LabelGridLayout extends GridLayout {
             label.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //控制标签的选择与取消
                     if (label.isSelected()){
                         label.setSelected(false);
                         selectLabel.remove(label.getText().toString());
@@ -150,6 +160,12 @@ public class LabelGridLayout extends GridLayout {
         model.setLabels(selectTab);
     }
 
+    /**
+     * 设置标签属性
+     * @param tabIndex 标签的位置
+     * @param tab 标签的tab
+     * @param label 标签控件
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setLabel(int tabIndex, FilterBean.TableMode tab, TextView label) {
         label.setTextSize(tabTextSize);
@@ -176,6 +192,7 @@ public class LabelGridLayout extends GridLayout {
     private void singleAddTabs(final FilterBean model){
         List<FilterBean.TableMode> tabs = model.getTabs();
         for (int i = 0; i < tabs.size(); i++){
+            //行数
             if (i % columnCount == 0){
                 row ++;
             }
@@ -198,7 +215,10 @@ public class LabelGridLayout extends GridLayout {
                         //设置当前点击选中的tab值
                         model.setTab(tab);
                         label.setSelected(true);
+                        selectTvLabel.add(label);
                         String labelText=label.getText().toString();
+                        //清楚集合中的数据再添加
+                        selectLabel.clear();
                         selectLabel.add(labelText);
                         Log.e("rcw","labelText--->"+labelText);
                     }
@@ -304,6 +324,9 @@ public class LabelGridLayout extends GridLayout {
         return selectLabel;
     }
 
+    /**
+     * 重置数据
+     */
     public void resetData(){
         for (int i=0;i<selectTvLabel.size();i++){
             selectTvLabel.get(i).setSelected(false);
