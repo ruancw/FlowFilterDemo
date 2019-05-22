@@ -109,7 +109,7 @@ public class TypeLabelGridLayout extends GridLayout {
     }
 
     /**
-     * 添加tab标签
+     * 添加tab多选标签
      * @param model 数据bean
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -251,7 +251,7 @@ public class TypeLabelGridLayout extends GridLayout {
             label.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (tab != model.getTab()){
+                    //if (tab != model.getTab()){
                         Log.e("rcw","index--->"+getIndex(model,labelIndex));
                         //清空上次选中的状态
                         getChildAt(getIndex(model,labelIndex)).setSelected(false);
@@ -281,7 +281,7 @@ public class TypeLabelGridLayout extends GridLayout {
                         //labelLists.add(model.getTypeName()+"-"+labelText);
                         Log.e("rcw","labelText--->"+model.getTypeName()+"-"+labelText);
                     }
-                }
+                //}
             });
         }
     }
