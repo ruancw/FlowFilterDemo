@@ -209,19 +209,20 @@ public class LabelGridLayout extends GridLayout {
             label.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (tab != model.getTab()){
+                    //if (tab != model.getTab()){
                         //清除上次选中的状态
                         getChildAt(getIndex(model)).setSelected(false);
                         //设置当前点击选中的tab值
                         model.setTab(tab);
                         label.setSelected(true);
+                        selectTvLabel.clear();
                         selectTvLabel.add(label);
                         String labelText=label.getText().toString();
                         //清楚集合中的数据再添加
                         selectLabel.clear();
                         selectLabel.add(labelText);
                         Log.e("rcw","labelText--->"+labelText);
-                    }
+                   // }
                 }
             });
         }
